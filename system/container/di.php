@@ -1,75 +1,56 @@
 <?php
 
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Url;
 use Phalcon\Di\DiInterface;
-use Phalcon\Mvc\ViewBaseInterface;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Db\Adapter\Pdo\Mysql;
-use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Steram;
 
 $container = new FactoryDefault();
 
-
-
-$container->set(
-    'view',
-    function () {
-        $view = new View();
-        $view->setViewsDir(APP_PATH . '/views/');
-        $view->registerEngines(
+$container->setShared(
+    'voltService',
+    function (\Phalcon\Mvc\ViewBaseInterface $view) {
+        $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $this);
+        $volt->setOptions(
             [
-                '.volt' => function (ViewBaseInterface $view) {
-                    $volt = new Volt($view, $this);
-                    $volt->setOptions(
-                        [
-                            'always'    => true,
-                            'extension' => '.php',
-                            'separator' => '_',
-                            'stat'      => true,
-                            'prefix'    => '-prefix-',
-                            'path' => function (string $templatePath) {
-                                $fileName = basename($templatePath);
-                                
-                                $dirPath = str_replace(APP_PATH, '/', dirname($templatePath));
-                                echo $dirPath;
-                                if (true !== is_dir(BASE_PATH . '/cache/' . $dirPath)) {
-                                    mkdir(
-                                        BASE_PATH . '/cache/' . $dirPath,
-                                        0777,
-                                        true
-                                    );
-                                }
-                                return  BASE_PATH . '/cache/' . $dirPath . '/' . $fileName . '.php';
-                            }
-                        ]
-                    );
+                'always'    => true,
+                'extension' => '.php',
+                'separator' => '_',
+                'stat'      => true,
+                'prefix'    => '-prefix-',
+                'path' => function (string $templatePath) {
+                    $fileName = basename($templatePath);
                     
-                    return $volt;
+                    $dirPath = str_replace(APP_PATH, '/', dirname($templatePath));
+
+                    if (true !== is_dir(BASE_PATH . '/cache/' . $dirPath)) {
+                        mkdir(
+                            BASE_PATH . '/cache/' . $dirPath,
+                            0777,
+                            true
+                        );
+                    }
+                    return  BASE_PATH . '/cache/' . $dirPath . '/' . $fileName . '.php';
                 }
             ]
         );
-
-        return $view;
+        
+        return $volt;
     }
 );
 
 $container->set(
     'url',
     function () {
-        $url = new Url();
+        $url = new \Phalcon\Url();
         $url->setBaseUri('/');
-
         return $url;
     }
 );
-//echo  $config->database->host, ' ', $config->database->username, ' ', $config->database->password, ' ', $config->database->name;
+
 $container->set(
     "db",
     function () use ($config) {
-        return new Mysql(
+        return new \Phalcon\Db\Adapter\Pdo\Mysql(
             [
                 "host"     => $config->database->host,
                 "username" => $config->database->username,
@@ -83,7 +64,7 @@ $container->set(
 $container->set(
     "session",
     function () {
-        $session = new Manager();
+        $session = new \Phalcon\Session\Manager();
         $files   = new Steram(
             [
                 'savePath' => '/tmp'
@@ -93,4 +74,30 @@ $container->set(
         $session->start();
         return $session;
     }
+);
+
+$container->set(
+    'security',
+    function () {
+        $security = new \Phalcon\Security();
+
+        $security->setWorkFactor(12);
+
+        return $security;
+    },
+    true
+);
+
+$container->set(
+    'crypt',
+    function () use ($config) {
+        $crypt = new \Phalcon\Crypt();
+        $crypt->setCipher('aes256')->useSigning(false);
+        $crypt->setKey(
+            $config->security->encryption_key
+        );
+
+        return $crypt;
+    },
+    true
 );
