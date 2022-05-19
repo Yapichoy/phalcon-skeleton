@@ -1,5 +1,9 @@
 {% extends 'templates/auth.template.volt' %}
-{% block content %} Login {% endblock %}
+{% block title %} Login {% endblock %}
+
+{% block styles %} 
+
+{% endblock %}
 
 {% block content %}
 <div class="card-body">
@@ -45,4 +49,8 @@
 		<a href="/auth/register" class="text-center">Register a new membership</a>
 	</p>
 </div>
+{% endblock %}
+
+{% block scripts %}
+
 {% endblock %}
