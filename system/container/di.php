@@ -2,7 +2,7 @@
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\DiInterface;
-use Phalcon\Session\Adapter\Steram;
+use Phalcon\Session\Adapter\Stream;
 
 $container = new FactoryDefault();
 
@@ -65,7 +65,7 @@ $container->set(
     "session",
     function () {
         $session = new \Phalcon\Session\Manager();
-        $files   = new Steram(
+        $files   = new Stream(
             [
                 'savePath' => '/tmp'
             ]
@@ -101,3 +101,4 @@ $container->set(
     },
     true
 );
+

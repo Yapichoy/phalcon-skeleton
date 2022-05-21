@@ -3,12 +3,57 @@ namespace App\Admin\Controller;
 
 use Phalcon\Mvc\Controller;
 use App\Admin\Models\Admin;
+use App\Admin\Models\Session;
+use App\Admin\Helpers\AuthHelper;
 
 class AuthController extends Controller {
 
     public function indexAction()
     {
+        if ($this->request->isPost()) {
+            $email = $this->request->getPost('email', 'email', null);
+            $password = $this->request->getPost('password');
+            $flag_remember = $this->request->getPost('flag_remember', bool, false);
 
+            try {
+                if (empty($email) || empty($password)) {
+                    throw new \Exception("All fields shouldn't be empty!");
+                }
+                $admin = Admin::findFirst("email = '$email'");
+                
+                if (empty($admin)) {
+                    throw new \Exception("Wrong email or password!");
+                }
+                $password = md5($password);
+
+                if ($password !== $admin->password) {
+                    throw new \Exception("Wrong email or password!");
+                }
+
+                $this->session->set(
+                    'session',
+                    [
+                        'admin_id'  => $admin->id,
+                        'is_log_in' => true,
+                        'flag_remember' => $flag_remember
+                    ]
+                );
+                $session = $this->session->get('session');
+                $result = [
+                    'status'    => true,
+                    'message'   => '',
+                    'result'    =>  $admin  
+                ];
+            } catch (\Throwable $e) {
+                $result = [
+                    'status'    => false,
+                    'message'   => $e->getMessage(),
+                    'result'    => [] 
+                ];
+            }
+            return $this->response
+                    ->setJsonContent($result);
+        }
     }
 
     public function registerAction()
@@ -28,12 +73,16 @@ class AuthController extends Controller {
                     throw new \Exception("Password error!");
                 }
 
+                if (AuthHelper::isAdminExist($email)) {
+                    throw new \Exception("Admin with email '$email' already exist!");
+                }
+
                 $admin = new Admin();
 
                 $data_obj = [
                     'name'      => $name,
                     'email'     => $email,
-                    'password'  => $this->security->hash($password)
+                    'password'  => md5($password)
                 ];
 
                 $admin->assign($data_obj);

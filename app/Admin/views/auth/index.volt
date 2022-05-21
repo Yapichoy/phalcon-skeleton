@@ -8,9 +8,9 @@
 {% block content %}
 <div class="card-body">
 	<p class="login-box-msg">Sign in to start your session</p>
-	<form action="../../index3.html" method="post">
+	<form id="loginForm">
 		<div class="input-group mb-3">
-			<input type="email" class="form-control" placeholder="Email">
+			<input type="email" class="form-control" id="email" name="email" placeholder="Email">
 			<div class="input-group-append">
 				<div class="input-group-text">
 					<span class="fas fa-envelope"></span>
@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="input-group mb-3">
-			<input type="password" class="form-control" placeholder="Password">
+			<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 			<div class="input-group-append">
 				<div class="input-group-text">
 					<span class="fas fa-lock"></span>
@@ -28,8 +28,8 @@
 		<div class="row">
 			<div class="col-8">
 				<div class="icheck-primary">
-					<input type="checkbox" id="remember">
-					<label for="remember">
+					<input type="checkbox" id="flag_remember" name="flag_remember">
+					<label for="flag_remember">
 						Remember Me
 					</label>
 				</div>
@@ -52,5 +52,21 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+	let loginForm = document.getElementById('loginForm');
+	loginForm.onsubmit = async (e) => {
+		e.preventDefault();
+		let formData = new FormData(loginForm);
+		let response = await fetch('/auth', {
+			method: 'POST',
+			body: formData
+		});
 
+		let result = await response.json();
+
+		if (!result.status) {
+			alert(result.message);
+		}
+	};
+</script> 
 {% endblock %}
