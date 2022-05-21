@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="{{constant('PUBLIC_PATH')}}/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{constant('PUBLIC_PATH')}}/admin/css/adminlte.min.css">
+  {% block styles %} {% endblock %}
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -31,8 +32,9 @@
 <!-- jQuery -->
 <script src="{{constant('PUBLIC_PATH')}}/admin/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src=".{{constant('PUBLIC_PATH')}}/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{constant('PUBLIC_PATH')}}/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{constant('PUBLIC_PATH')}}/admin/js/adminlte.min.js"></script>
+{% block scripts %} {% endblock %}
 </body>
 </html>

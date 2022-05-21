@@ -21,6 +21,8 @@ class Module implements ModuleDefinitionInterface
                 APP_PATH . '/Admin/controllers/',
                 APP_PATH . '/Admin/models/',
                 APP_PATH . '/Admin/views/',
+                APP_PATH . '/Admin/helpers/',
+                APP_PATH . '/Admin/plugins/',
             ]
         );
         
@@ -28,7 +30,9 @@ class Module implements ModuleDefinitionInterface
             [
                 'App\Admin\Controller'  => APP_PATH . '/Admin/controllers/',
                 'App\Admin\Models'      => APP_PATH . '/Admin/models/',
-                'App\Admin\Views'       => APP_PATH . '/Admin/views/'
+                'App\Admin\Views'       => APP_PATH . '/Admin/views/',
+                'App\Admin\Helpers'     => APP_PATH . '/Admin/helpers/',
+                'App\Admin\Plugins'     => APP_PATH . '/Admin/plugins/',
             ]
         );
 
@@ -67,6 +71,24 @@ class Module implements ModuleDefinitionInterface
                 );
 
                 return $view;
+            }
+        );
+
+        $container->set(
+            'dispatcher',
+            function () {
+                $eventsManager = new \Phalcon\Events\Manager();
+        
+                $eventsManager->attach(
+                    'dispatch:beforeExecuteRoute',
+                    new \App\Admin\Plugins\SecurityPlugin()
+                );
+        
+                $containerspatcher = new \Phalcon\Mvc\Dispatcher();
+        
+                $containerspatcher->setEventsManager($eventsManager);
+        
+                return $containerspatcher;
             }
         );
     }

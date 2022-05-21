@@ -15,6 +15,7 @@ class Admin extends Model {
 
     public function initialize()
     {
+        $this->setSource('admins');
         $this->hasMany(
             'id',
             Session::class,
