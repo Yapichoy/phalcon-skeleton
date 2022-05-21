@@ -104,7 +104,6 @@ class AuthController extends Controller {
             
             return $this->response
                     ->setJsonContent($result);
-        }
-        
+        }        
     }
 }
