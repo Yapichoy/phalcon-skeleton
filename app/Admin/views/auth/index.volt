@@ -1,4 +1,5 @@
 {% extends 'templates/auth.template.volt' %}
+
 {% block title %} Login {% endblock %}
 
 {% block styles %} 

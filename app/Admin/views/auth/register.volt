@@ -4,7 +4,6 @@
 {% block content %}
 <div class="card-body">
 	<p class="login-box-msg">Register a new membership</p>
-
 	<form id="registrationForm">
 		<div class="input-group mb-3">
 			<input type="text" class="form-control" placeholder="Full name" id="name" name="name">
@@ -39,6 +38,15 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-8">
+				<div class="icheck-primary">
+					<input type="checkbox" id="agreeTerms" name="terms" value="agree">
+					<label for="agreeTerms">
+						I agree to the
+						<a href="#">terms</a>
+					</label>
+				</div>
+			</div>
 			<!-- /.col -->
 			<div class="col-4">
 				<button type="submit" class="btn btn-primary btn-block">Register</button>
