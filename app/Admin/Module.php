@@ -2,7 +2,7 @@
 
 namespace App\Admin;
 
-use Phalcon\Loader;
+use Phalcon\Autoload\Loader;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\ModuleDefinitionInterface;
@@ -16,7 +16,7 @@ class Module implements ModuleDefinitionInterface
     {
         $loader = new Loader();
 
-        $loader->registerDirs(
+        $loader->setDirectories(
             [
                 APP_PATH . '/Admin/controllers/',
                 APP_PATH . '/Admin/models/',
@@ -26,7 +26,7 @@ class Module implements ModuleDefinitionInterface
             ]
         );
         
-        $loader->registerNamespaces(
+        $loader->setNamespaces(
             [
                 'App\Admin\Controller'  => APP_PATH . '/Admin/controllers/',
                 'App\Admin\Models'      => APP_PATH . '/Admin/models/',

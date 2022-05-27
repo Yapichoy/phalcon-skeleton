@@ -31,7 +31,8 @@ class Session extends Model {
         $this->belongsTo(
             'admin_id',
             Admin::class,
-            'id'
+            'id',
+            []
         )
     }
 }

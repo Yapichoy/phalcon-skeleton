@@ -19,7 +19,8 @@ class Admin extends Model {
         $this->hasMany(
             'id',
             Session::class,
-            'admin_id'
+            'admin_id',
+            []
         );
     }
 }

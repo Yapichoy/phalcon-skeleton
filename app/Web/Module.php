@@ -2,7 +2,7 @@
 
 namespace App\Web;
 
-use Phalcon\Loader;
+use Phalcon\Autoload\Loader;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\ModuleDefinitionInterface;
@@ -15,7 +15,7 @@ class Module implements ModuleDefinitionInterface
     )
     {
         $loader = new Loader();
-        $loader->registerNamespaces(
+        $loader->setNamespaces(
             [
                 'App\Web\Controller' => APP_PATH . '/Web/controllers/',
                 'App\Web\Models'      => APP_PATH . '/Web/models/',
