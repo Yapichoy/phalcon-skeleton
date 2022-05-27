@@ -37,7 +37,7 @@ class AuthController extends Controller {
         if ($this->request->isPost()) {
             $email = $this->request->getPost('email', 'email', null);
             $password = $this->request->getPost('password');
-            $flag_remember = $this->request->getPost('flag_remember', bool, false);
+            $flag_remember = $this->request->getPost('flag_remember', null, false);
 
             try {
                 if (empty($email) || empty($password)) {
@@ -135,6 +135,7 @@ class AuthController extends Controller {
             
             return $this->response
                     ->setJsonContent($result);
-        }        
+        }
+        
     }
 }
