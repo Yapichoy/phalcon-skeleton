@@ -1,5 +1,4 @@
 {% extends 'templates/auth.template.volt' %}
-
 {% block title %} Login {% endblock %}
 
 {% block styles %} 
@@ -46,8 +45,8 @@
 	<p class="mb-1">
 		<a href="forgot-password.html">I forgot my password</a>
 	</p>
-	<p class="mb-0">
-		<a href="{{ url('/auth/register') }}" class="text-center">Register a new membership</a>
+	<p class="mb-1">
+		<a href="/auth/register" class="text-center">Register a new membership</a>
 	</p>
 </div>
 {% endblock %}
