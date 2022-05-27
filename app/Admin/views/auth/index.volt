@@ -46,7 +46,7 @@
 		<a href="forgot-password.html">I forgot my password</a>
 	</p>
 	<p class="mb-0">
-		<a href="/auth/register" class="text-center">Register a new membership</a>
+		<a href="{{ url('/auth/register') }}" class="text-center">Register a new membership</a>
 	</p>
 </div>
 {% endblock %}
@@ -64,7 +64,9 @@
 
 		let result = await response.json();
 
-		if (!result.status) {
+		if (result.status) {
+			window.location.href = "/";
+		} else {
 			alert(result.message);
 		}
 	};
