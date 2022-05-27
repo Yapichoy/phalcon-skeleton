@@ -22,18 +22,17 @@ class SecurityPlugin extends Injectable
         $action     = $containerspatcher->getActionName();
 
         if ($controller !== "auth") {
-            if (!$flag_login) {
-                $this->flash->error(
-                    "You should be logged in"
-                );
-    
-                $containerspatcher->forward(
+            if (!$flag_login) {   
+                /*$containerspatcher->forward(
                     [
                         'controller' => 'auth',
                         'action'     => 'index',
                     ]
+                );*/
+                $this->response->redirect(
+                    '/auth',
+                    true
                 );
-    
                 return false;
             }
         }

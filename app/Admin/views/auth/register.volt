@@ -69,10 +69,12 @@
 			method: 'POST',
 			body: formData
 		});
-
+		debugger
 		let result = await response.json();
 
-		if (!result.status) {
+		if (result.status) {
+			window.location.href = "/";
+		} else {
 			alert(result.message);
 		}
 	};

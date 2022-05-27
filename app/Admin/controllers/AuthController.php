@@ -2,11 +2,35 @@
 namespace App\Admin\Controller;
 
 use Phalcon\Mvc\Controller;
+use Phalcon\Mvc\Dispatcher;
 use App\Admin\Models\Admin;
 use App\Admin\Models\Session;
 use App\Admin\Helpers\AuthHelper;
 
 class AuthController extends Controller {
+
+    private function _redirectIfAuth()
+    {
+        $session = $this->session->get('session');
+        $flag_login = false;
+        if (isset($session['is_log_in']) && $session['is_log_in']) {
+            $flag_login = true;
+        }
+
+        if ($flag_login) {
+            $this->response = $this->response->redirect(
+                '/',
+                true
+            );
+
+            return false;
+        }
+        return true;
+    }
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    {
+        return $this->_redirectIfAuth();
+    }
 
     public function indexAction()
     {
@@ -38,7 +62,7 @@ class AuthController extends Controller {
                         'flag_remember' => $flag_remember
                     ]
                 );
-                $session = $this->session->get('session');
+
                 $result = [
                     'status'    => true,
                     'message'   => '',
@@ -88,7 +112,14 @@ class AuthController extends Controller {
                 $admin->assign($data_obj);
 
                 $status = $admin->create();
-
+                $this->session->set(
+                    'session',
+                    [
+                        'admin_id'  => $admin->id,
+                        'is_log_in' => true,
+                        'flag_remember' => false
+                    ]
+                );
                 $result = [
                     'status'    => $status,
                     'message'   => '',
